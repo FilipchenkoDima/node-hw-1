@@ -18,8 +18,9 @@ async function getContacts() {
 async function listContacts() {
   try {
     const contactsList = await getContacts();
-    const contacts = contactsList.map(({ name, email, phone }) => {
+    const contacts = contactsList.map(({ name, email, phone, id }) => {
       return {
+        Id: id,
         Name: name,
         Email: email,
         Phone: phone,
@@ -35,7 +36,9 @@ async function listContacts() {
 async function getContactById(contactId) {
   try {
     const contactsList = await getContacts();
-    const contact = contactsList.filter(({ id }) => Number(id) === contactId);
+    const contact = contactsList.filter(
+      ({ id }) => String(id) === String(contactId)
+    );
 
     console.table(contact);
   } catch (error) {
@@ -76,6 +79,7 @@ async function addContact(name, email, phone) {
     fs.writeFile(contactsPath, JSON.stringify(contactsList));
 
     console.log("Success!");
+    console.table(newContact);
   } catch (error) {
     console.log(error);
   }
